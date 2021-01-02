@@ -1,0 +1,6 @@
+senthan,10,male
+thanvi,9,female
+bob,9,male
+kautilya,11,male
+papa,41,male
+sheeru,14,male

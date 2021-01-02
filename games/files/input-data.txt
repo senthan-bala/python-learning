@@ -1,0 +1,3 @@
+apple,5
+bamba,7
+buberry,3

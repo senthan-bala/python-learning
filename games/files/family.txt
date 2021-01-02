@@ -1,0 +1,4 @@
+mommy,38,female
+senthan,10,male
+nila,5,female
+papa,41,male

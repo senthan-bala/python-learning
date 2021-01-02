@@ -1,0 +1,7 @@
+mommy,20000,765
+papa,26000,567
+nila,6000,222
+senthan,8700,333
+sheeru,9000,735
+mohan,7000,789
+megeraj,7500,234
