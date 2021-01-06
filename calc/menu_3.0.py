@@ -1,8 +1,25 @@
 import numbers
 
+
 file_1 = open("games/files/menu.txt", "r")
 txt = file_1.read()
 lines = txt.splitlines()
+file_1.close()
+
+
+def write_file(lines):
+    file_1 = open("games/files/menu.txt", "w")
+    complete_lines = "\n".join(lines)
+    file_1.write(complete_lines)
+    file_1.close()
+
+
+def build_lines(items):
+    lines = []
+    for item in items:
+        line = " - ".join([item["thing"], str(item["price"]), str(item["amount"])])
+        lines.append(line)
+    return lines
 
 
 def convertToNumber(str):
@@ -58,22 +75,37 @@ def ask_for_items(items):
 
 
 def amt_finder(customer_items, items):
-    item_amounts=[]
+    item_amounts = []
     for item in items:
         item_amount = {}
         item_amount["amount"] = 0
+        item_amount["thing"] = "backup"
         for customer_item in customer_items:
             if customer_item == item["thing"]:
                 item_amount["thing"] = customer_item
                 item_amount["amount"] = int(item_amount["amount"]) + 1
         item_amounts.append(item_amount)
     return item_amounts
-                
+
 
 def amt_changer(item_amounts):
+    item_amt_holders = []
     for item_amount in item_amounts:
-        item_amt_holder={}
-       
+        item_amt_holder = {}
+        minus_amount = (str(item_amount["amount"])).strip()
+        minus_amount = int("-" + minus_amount)
+        item_amt_holder["how_much"] = minus_amount
+        item_amt_holder["thing"] = item_amount["thing"]
+        item_amt_holders.append(item_amt_holder)
+    return item_amt_holders
+
+
+def items_changer(item_amt_holders, items):
+    for item_amt_holder in item_amt_holders:
+        for item in items:
+            if item_amt_holder["thing"] == item["thing"]:
+                item["amount"] = int(item["amount"] + item_amt_holder["how_much"])
+    return items
 
 
 def price_finder(customer_items, items):
@@ -128,10 +160,15 @@ def ask_for_price(final_price):
 def command(lines):
     items = file_reader(lines)
     customer_items = ask_for_items(items)
-    item_amounts = amt_finder(customer_items,items)
+    item_amounts = amt_finder(customer_items, items)
     prices = price_finder(customer_items, items)
     final_price = finalize_price(prices)
     ask_for_price(final_price)
+    item_amounts = amt_finder(customer_items, items)
+    item_amt_holders = amt_changer(item_amounts)
+    items = items_changer(item_amt_holders, items)
+    lines = build_lines(items)
+    write_file(lines)
 
 
 command(lines)

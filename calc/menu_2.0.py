@@ -8,7 +8,7 @@ def read_file():
 
 def write_file(lines):
     file_1 = open("games/files/menu.txt", "w")
-    line = '\n'.join(lines)
+    line = "\n".join(lines)
     file_1.write(line)
     file_1.close()
 
