@@ -12,25 +12,25 @@ rooms = {
     "basement": {"items": [], "directions": {"up": "hall"}},
     "king bed": {"items": ["gun"], "directions": {"right": "hall"}},
     "corridor": {
-        "items": ["Monster"],
+        "items": ["monster"],
         "directions": {"right": "kid's bed", "left": "hall"},
     },
     "kid's bed": {"items": ["debbie"], "directions": {"left": "corridor"}},
 }
 
-current_room = rooms["hall"]
 is_p_in_maze = True
-inventory = []
 
 
-def ask_for_room(current_room):
+def ask_for_room(current_room, rooms):
+    directions = str(list(rooms[current_room]["directions"]))
     is_direction_valid = False
     while not is_direction_valid:
-        next_room_direction = input(
-            "Directions available: " + str(list(current_room["directions"])) + ": "
+        print(
+            "Directions available: ", str(list(rooms[current_room]["directions"])), ": "
         )
+        next_room_direction = input()
         next_room_direction = next_room_direction.strip()
-        for direction in list(current_room["directions"]):
+        for direction in list(rooms[current_room]["directions"]):
             if next_room_direction == direction:
                 is_direction_valid = True
                 break
@@ -41,8 +41,18 @@ def ask_for_room(current_room):
 
 
 def change_room(current_room, next_room_direction):
-    current_room = current_room["directions"][next_room_direction]
+    current_room = rooms[current_room]["directions"][next_room_direction]
     return current_room
+
+
+def check_for_monster(current_room, rooms, inventory):
+    global is_p_in_maze
+    if "monster" in rooms[current_room]["items"] and "gun" not in inventory:
+        is_p_in_maze = False
+        print("The Monster got you! YOU LOSE!!!!")
+    elif "monster" in rooms[current_room]["items"] and "gun" in inventory:
+        print("You killed the monster! Yay!!!")
+        rooms[current_room]["items"].remove("monster")
 
 
 def ask_for_items(current_room, inventory, rooms):
@@ -65,6 +75,23 @@ def ask_for_items(current_room, inventory, rooms):
     print("Your inventory: ", inventory)
 
 
-current_room = ask_for_room(current_room)
-ask_for_items(current_room, inventory, rooms)
-print("OK")
+def check_if_won(current_room, inventory):
+    global is_p_in_maze
+    if current_room == "basement" and "key" in inventory and "debbie" in inventory:
+        print("O_O You won... YOU ARE AMAZING, YOU WIN!!!!! O_O")
+        is_p_in_maze = False
+
+
+current_room = "hall"
+inventory = []
+
+while is_p_in_maze:
+    current_room = ask_for_room(current_room, rooms)
+    check_for_monster(current_room, rooms, inventory)
+    if is_p_in_maze == False:
+        break
+    ask_for_items(current_room, inventory, rooms)
+    check_if_won(current_room, inventory)
+    if is_p_in_maze == False:
+        break
+    is_p_in_maze = True
