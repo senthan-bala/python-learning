@@ -67,3 +67,4 @@ def ask_for_items(current_room, inventory, rooms):
 
 current_room = ask_for_room(current_room)
 ask_for_items(current_room, inventory, rooms)
+print("OK")
