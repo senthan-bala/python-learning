@@ -20,8 +20,6 @@ words = [
 hang_max = 6
 max_empty_letters = 5
 
-print("rfgbcuyer")
-
 
 def pick_word(words):
     letter_indexes = []
