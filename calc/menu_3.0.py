@@ -145,7 +145,7 @@ def ask_for_price(final_price):
                     if cash_amount >= final_price:
                         change = cash_amount - final_price
                         change = round(change, 2)
-                        print("Here is your change:", change)
+                        print("Change:", change)
                         is_price_paid = True
                         break
                     elif cash_amount < final_price:
