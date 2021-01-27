@@ -1,6 +1,6 @@
 import turtle
 
-x = 50
+x = 100
 
 # turtles
 tina = turtle.Turtle()
