@@ -13,11 +13,10 @@ for abc in range(int(list_input)):
 length = len(number_list) + len(number_list2)
 
 for i in range(length):
-    min_number = min(number_list)
+    min_number = max(number_list)
     number_list2.append(min_number)
     number_list.remove(min_number)
     length = len(number_list) + len(number_list2)
 
 
 print(number_list2)
-

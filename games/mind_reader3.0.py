@@ -75,4 +75,3 @@ while is_guess_correct == False:
     elif high_low == "high":
         low_range = current_guess
         current_guess = calc_guess(high_range, low_range)
-

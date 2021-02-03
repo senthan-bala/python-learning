@@ -1,40 +1,43 @@
+ages = [800]
 
-ages = [30, 45, 23, 5, 12, -4, 0]
 
-def calc_age_group (age):
+def calc_age_group(age):
     if age <= 5 and age > 0:
-        print('Debbie the baby')
+        print("Debbie the baby")
     elif age > 5 and age <= 12:
-        print('Kid')
+        print("Kid")
     elif age >= 13 and age < 18:
-        print('Teen') 
+        print("Teen")
     elif age >= 100:
-        print('Mega grandpa')
+        print("Too old")
     elif age >= 18:
-        print('Adult')
+        print("Adult")
     else:
-        print('You are not alive')
-    
+        print("You are not alive")
+
+
 def calc_schools(age):
     if age > 5 and age <= 25:
-        print('Student')
+        print("Student")
         if age > 5 and age <= 11:
-            print('Elementary')
+            print("Elementary")
         elif age <= 14 and age > 12:
-            print('Middle')
+            print("Middle")
         elif age <= 18 and age >= 15:
-            print('High')
+            print("High")
         elif age <= 25 and age >= 19:
-            print('College')
+            print("College")
     elif age > 25:
-            print('Too old')
+        print("Mega grandpa")
     else:
-        print('Baby or not born')    
+        print("Baby or not born")
+
 
 def full_calc(age):
-    print('\nProcessing age:', age )
+    print("\nProcessing age:", age)
     calc_age_group(age)
     calc_schools(age)
-    
+
+
 for i in ages:
     full_calc(i)

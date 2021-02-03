@@ -1,4 +1,4 @@
-current_time = "08,02,2020"
+current_time = "02,01,2021"
 
 
 def ask_for_birth(current_time):
@@ -28,7 +28,7 @@ def ask_for_birth(current_time):
         days_old = current_day - int(day)
     elif int(month) > current_month and int(day) > current_day:
         years_old = current_year - int(year) - 1
-        months_old = (current_month + 12) - int(month)-1
+        months_old = (current_month + 12) - int(month) - 1
         days_old = current_day - int(day) + 30
     elif int(month) > current_month and int(day) <= current_day:
         years_old = current_year - int(year) - 1
@@ -36,7 +36,7 @@ def ask_for_birth(current_time):
         days_old = current_day - int(day)
     elif int(month) <= current_month and int(day) > current_day:
         years_old = current_year - int(year)
-        months_old = current_month - int(month)-1
+        months_old = current_month - int(month) - 1
         days_old = current_day - int(day) + 30
 
     print("Years old:", years_old, ", Months old:", months_old, ", Days old:", days_old)

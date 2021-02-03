@@ -2,3 +2,4 @@ hubot,5,6,7
 cyborg,4,6,9
 wolf,6,6,4
 turbo,8,4,2
+no,0,0,0

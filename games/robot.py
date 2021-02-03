@@ -10,7 +10,11 @@ for line in robot_file.read().splitlines():
 robot_file.close()
 
 yes_or_no = input("Do you want to choose a robot? ")
-while yes_or_no == "yes":
+
+while yes_or_no == "yes" or yes_or_no == "no":
+    if yes_or_no == "no":
+        print("YOU HAVE TO PICK ONE YOU BOT")
+
     robot = input("Choose a robot " + str(list(robots.keys())))
     if robot not in robots:
         print("Sorry! Wrong input!")
@@ -28,4 +32,5 @@ while yes_or_no == "yes":
             intel,
         )
     yes_or_no = input("Do you want to keep going? ")
-
+    if yes_or_no == "no":
+        print("YOU HAVE TO PICK ON YOU BOT")
