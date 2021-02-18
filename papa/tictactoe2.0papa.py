@@ -3,13 +3,13 @@ import turtle
 tina = turtle.Turtle()
 tina.shape("circle")
 tina.pensize(3)
-tina.speed(100)
+tina.speed(100000000000000)
 
-# number of squares in a row.
-m = 4
+# number of squares in a row/column.
+m = 3
 
 # size of small square
-z = 20
+z = 100
 
 
 def draw_square(x, y):

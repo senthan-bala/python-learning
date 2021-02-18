@@ -1,6 +1,6 @@
 import turtle
 
-z = -11
+z = 100
 tina = turtle.Turtle()
 tina.shape("turtle")
 tina.pensize(3)
