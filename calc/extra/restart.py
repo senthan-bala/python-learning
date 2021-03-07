@@ -1,5 +1,6 @@
 numbers = [4356, 5679, 9876, 25454, 7676467]
 
+
 def check_if_div(num):
     half_num = num / 2
     half_num2 = int(half_num)
@@ -8,9 +9,8 @@ def check_if_div(num):
         even_or_odd = "even"
     elif num2 != num:
         even_or_odd = "odd"
-
     return even_or_odd
-    
+
 
 def print_if_div(lst):
     for item in lst:
@@ -22,4 +22,3 @@ def print_if_div(lst):
 
 
 print_if_div(numbers)
-
