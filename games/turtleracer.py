@@ -28,7 +28,7 @@ juhi.color("green")
 
 # 16 is the max with 30 spacing
 no_of_turtles = 10
-spacing = 20
+spacing = 50
 min_x_pos = 0
 
 
@@ -129,9 +129,7 @@ def start_racing():
     find_winner(nila_x_pos, sanvi_x_pos, juhi_x_pos)
 
 
-print("Before tracks -", min_x_pos)
 make_full_track()
-print("After tracks -", min_x_pos)
 ready_up()
 start_racing()
 

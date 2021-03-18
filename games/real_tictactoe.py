@@ -101,11 +101,10 @@ def make_x(length, xpos, ypos):
     tina.goto(xpos, ypos)
     tina.left(45)
     tina.pendown()
-    for i in range(4):
+    for i in range(8):
         tina.forward(length / 2)
         tina.right(180)
-        tina.forward(length / 2)
-        tina.right(270)
+        tina.right(90)
     tina.penup()
     tina.right(45)
 
@@ -118,91 +117,44 @@ def claim_pos(counter, counters):
     return is_xy_val
 
 
+def write_win(win_write_place, winner):
+    print("Player " + winner + " Won!")
+    tina.goto(win_write_place)
+    tina.write("Player " + winner + " Won!")
+
+
 def check_if_win(p, i, num2, length):
+    winner = p[0]
     win_write_place = -(length * 0.33), length * 2
     is_program_done = False
-    if num2 == i:
-        if "A,1" in p and "A,2" in p and "A,3" in p:
-            print("Player 1 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 1 Won!")
-            is_program_done = True
-        elif "A,1" in p and "B,1" in p and "C,1" in p:
-            print("Player 1 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 1 Won!")
-            is_program_done = True
-        elif "A,1" in p and "B,2" in p and "C,3" in p:
-            print("Player 1 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 1 Won!")
-            is_program_done = True
-        elif "C,1" in p and "B,2" in p and "A,3" in p:
-            print("Player 1 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 1 Won!")
-            is_program_done = True
-        elif "C,1" in p and "C,2" in p and "C,3" in p:
-            print("Player 1 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 1 Won!")
-            is_program_done = True
-        elif "C,3" in p and "B,3" in p and "A,3" in p:
-            print("Player 1 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 1 Won!")
-            is_program_done = True
-        elif "B,1" in p and "B,2" in p and "B,3" in p:
-            print("Player 1 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 1 Won!")
-            is_program_done = True
-        elif "A,2" in p and "B,2" in p and "C,2" in p:
-            print("Player 1 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 1 Won!")
-            is_program_done = True
-    else:
-        if "A,1" in p and "A,2" in p and "A,3" in p:
-            print("Player 2 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 2 Won!")
-            is_program_done = True
-        elif "A,1" in p and "B,1" in p and "C,1" in p:
-            print("Player 2 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 2 Won!")
-            is_program_done = True
-        elif "A,1" in p and "B,2" in p and "C,3" in p:
-            print("Player 2 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 2 Won!")
-            is_program_done = True
-        elif "C,1" in p and "B,2" in p and "A,3" in p:
-            print("Player 2 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 2 Won!")
-            is_program_done = True
-        elif "C,1" in p and "C,2" in p and "C,3" in p:
-            print("Player 2 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 2 Won!")
-            is_program_done = True
-        elif "C,3" in p and "B,3" in p and "A,3" in p:
-            print("Player 2 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 2 Won!")
-            is_program_done = True
-        elif "B,1" in p and "B,2" in p and "B,3" in p:
-            print("Player 2 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 2 Won!")
-            is_program_done = True
-        elif "A,2" in p and "B,2" in p and "C,2" in p:
-            print("Player 2 Won!")
-            tina.goto(win_write_place)
-            tina.write("Player 2 Won!")
-            is_program_done = True
+    if (
+        "A,1" in p
+        and "A,2" in p
+        and "A,3" in p
+        or "B,1" in p
+        and "B,2" in p
+        and "B,3" in p
+        or "C,1" in p
+        and "C,2" in p
+        and "C,3" in p
+        or "A,1" in p
+        and "B,1" in p
+        and "C,1" in p
+        or "A,2" in p
+        and "B,2" in p
+        and "C,2" in p
+        or "C,3" in p
+        and "B,3" in p
+        and "A,3" in p
+        or "A,1" in p
+        and "B,2" in p
+        and "C,3" in p
+        or "C,1" in p
+        and "B,2" in p
+        and "A,3" in p
+    ):
+        write_win(win_write_place, winner)
+        is_program_done = True
     return is_program_done
 
 
@@ -235,8 +187,8 @@ def ask_for_window_instruct():
 
 
 counters = []
-p1_counter = []
-p2_counter = []
+p1_counter = ["1"]
+p2_counter = ["2"]
 setup(length)
 make_board(length)
 for i in range(9):
@@ -248,10 +200,8 @@ for i in range(9):
         counter = {}
         x, y = ask_coords()
         xpos, ypos = calc_xy_pos(length, x, y)
-        counter["x"] = xpos
-        counter["y"] = ypos
-        x_and_comma = str(x) + ","
-        xy = x_and_comma + str(y)
+        counter["x,y"] = xpos, ypos
+        xy = str(x) + "," + str(y)
         is_xy_val = claim_pos(counter, counters)
         if is_xy_val == True:
             counters.append(counter)
