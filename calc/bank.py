@@ -1,5 +1,5 @@
 def read_file():
-    file_1 = open("games/files/bankYeet.txt", "r")
+    file_1 = open("games/files/bank.txt", "r")
     txt = file_1.read()
     lines = txt.splitlines()
     file_1.close()
@@ -18,11 +18,10 @@ def place_items(lines):
     return accounts
 
 
-def write_file(accounts): 
+def write_file(accounts):
     file_1 = open("games/files/bankYeet.txt", "w")
     rep_lines = []
     for account in accounts:
-        
         rep_line = ",".join(
             [account["name"], str(account["amt"]), str(account["pass"])]
         )

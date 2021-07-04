@@ -1,8 +1,8 @@
 numbers = []
-max_num = 101
+max_num = 100
 is_guess_correct = False
 
-for i in range(1, max_num):
+for i in range(1, max_num + 1):
     numbers.append(i)
 
 
@@ -24,7 +24,7 @@ def remove_mult(numbers: list, multiple: int):
     return numbers2
 
 
-print("Pick a number between 1 and", max_num - 1)
+print("Pick a number between 1 and", max_num)
 
 is_div_2 = input("Is it divisible by two?")
 if is_div_2 == "yes":

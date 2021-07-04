@@ -1,12 +1,11 @@
 import turtle
-import random
 
 length = 100
 tina = turtle.Turtle()
 tina.shape("turtle")
 tina.pensize(3)
-tina.speed(50)
-tina.hideturtle()
+tina.speed(1)
+# tina.hideturtle()
 
 
 def setup(length):
@@ -104,6 +103,7 @@ def make_x(length, xpos, ypos):
     for i in range(8):
         tina.forward(length / 2)
         tina.right(180)
+        tina.forward(length / 2)
         tina.right(90)
     tina.penup()
     tina.right(45)

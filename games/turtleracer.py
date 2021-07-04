@@ -27,8 +27,8 @@ juhi.color("green")
 
 
 # 16 is the max with 30 spacing
-no_of_turtles = 10
-spacing = 50
+no_of_turtles = 5
+spacing = 30
 min_x_pos = 0
 
 
