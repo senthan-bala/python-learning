@@ -1,6 +1,6 @@
 import turtle
 
-speed = 20
+speed = 20000000000000
 base = 75
 adj = 10
 stump_width = 30

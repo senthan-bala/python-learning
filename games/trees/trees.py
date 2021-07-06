@@ -3,6 +3,7 @@ import turtle
 tina = turtle.Turtle()
 tina.shape("turtle")
 tina.pensize(3)
+tina.speed(50)
 
 base = 75
 adj = 10

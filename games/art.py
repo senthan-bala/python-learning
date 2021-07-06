@@ -27,21 +27,22 @@ colors = [
     "blue",
     "red",
     "green",
+    "lime",
     "purple",
     "orange",
-    "black",
-    "gray",
-    "brown",
-    "hot pink",
-    "turquoise",
+    "deep pink",
+    "cyan",
+    "yellow",
+    "deep sky blue",
+    "magenta",
 ]
-for i in range(randint(25, 50)):
+for i in range(randint(100, 400)):
     s_length = randint(10, 50)
     l_length = randint(30, 100)
     tina.color(choice(colors))
     tina.left(randint(10, 100))
     tina.penup()
-    tina.goto(randint(-200, 200), randint(-200, 200))
+    tina.goto(randint(-300, 300), randint(-300, 300))
     tina.pendown()
     make_full_rect(s_length, l_length)
 tina.hideturtle()

@@ -1,4 +1,4 @@
-current_time = "02,01,2021"
+current_time = "07,03,2021"
 
 
 def ask_for_birth(current_time):

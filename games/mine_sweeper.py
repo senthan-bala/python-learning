@@ -3,27 +3,21 @@ from random import randint
 map_size = 6
 
 
-def check_if_num(subject):
-    if (
-        subject == "1"
-        or subject == "2"
-        or subject == "3"
-        or subject == "4"
-        or subject == "5"
-        or subject == "6"
-    ):
-        is_num = True
+def check_if_num(subject, map_size):
+    for num in range(1, map_size - 1):
+        if subject == str(num):
+            is_num = True
     else:
         is_num = False
     return is_num
 
 
-def ready_coords(coords):
+def ready_coords(coords, map_size):
     x, y = coords.split(",")
     x = x.strip()
     y = y.strip()
-    isx = check_if_num(x)
-    isy = check_if_num(y)
+    isx = check_if_num(x, map_size)
+    isy = check_if_num(y, map_size)
     if isx == True:
         x = int(x)
     if isy == True:
@@ -95,14 +89,14 @@ def make_numbers(map_squares, map_size):
     return map_squares
 
 
-def play_game(map_squares):
+def play_game(map_squares, map_size):
     is_game_done = False
     while not is_game_done:
         coords = input("What coordinates would you like to search? : ")
-        isx, isy, x, y = ready_coords(coords)
+        isx, isy, x, y = ready_coords(coords, map_size)
         while not isx or not isy:
             coords = input("Those coordinates were invalid, please try again: ")
-            isx, isy, x, y = ready_coords(coords)
+            isx, isy, x, y = ready_coords(coords, map_size)
         label = str(x) + "," + str(y)
         if map_squares[label]["mine"] == True:
             print("BOOM! You lose! Maybe next time.")
@@ -114,4 +108,4 @@ def play_game(map_squares):
 map_squares = make_map(map_size)
 map_squares = add_mines(map_squares, map_size)
 map_squares = make_numbers(map_squares, map_size)
-play_game(map_squares)
+play_game(map_squares, map_size)
