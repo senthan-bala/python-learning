@@ -36,7 +36,7 @@ colors = [
     "deep sky blue",
     "magenta",
 ]
-for i in range(randint(100, 400)):
+for i in range(randint(100, 200)):
     s_length = randint(10, 50)
     l_length = randint(30, 100)
     tina.color(choice(colors))

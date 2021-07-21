@@ -1,14 +1,15 @@
 from random import randint
 
-map_size = 6
+map_size = 10
 
 
 def check_if_num(subject, map_size):
     for num in range(1, map_size - 1):
         if subject == str(num):
             is_num = True
-    else:
-        is_num = False
+            return is_num
+        else:
+            is_num = False
     return is_num
 
 

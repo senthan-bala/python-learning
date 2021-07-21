@@ -94,7 +94,7 @@ clock_list2 = (clock_list1[1]).split(":")
 minute_angle = (int(clock_list2[1]) / 60) * 360
 if int(clock_list2[0]) > 12:
     hour_angle = ((int(clock_list2[0]) - 12) / 12) * 360 + (minute_angle / 12)
-elif int(clock_list2[0]) < 12:
+elif int(clock_list2[0]) <= 12:
     hour_angle = (int(clock_list2[0]) / 12) * 360 + (minute_angle / 12)
 second_angle = (int(clock_list2[2]) / 60) * 360
 
