@@ -4,8 +4,8 @@ length = 100
 tina = turtle.Turtle()
 tina.shape("turtle")
 tina.pensize(3)
-tina.speed(1)
-# tina.hideturtle()
+tina.speed(100)
+tina.hideturtle()
 
 
 def setup(length):

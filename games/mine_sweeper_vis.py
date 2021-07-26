@@ -7,7 +7,7 @@ pie.pensize(3)
 pie.speed(35)
 pie.penup()
 pie.goto(-250, 250)
-map_size = 10
+map_size = 5
 square_size = 500 / map_size
 c = "papaya whip"
 colist = [
@@ -23,6 +23,9 @@ colist = [
     "black",
     "red",
 ]
+
+
+opened_squares = []
 
 
 def make_map(map_size, square_size, col):
@@ -78,6 +81,8 @@ def ready_coords(coords, map_size):
 
 
 def open_square(square_size, x, y, map_squares, colist, label):
+    x = int(x)
+    y = int(y)
     mx = x - 1
     my = y - 1
     pie.forward(mx * square_size)
@@ -99,11 +104,14 @@ def open_square(square_size, x, y, map_squares, colist, label):
     pie.forward(square_size)
     pie.left(90)
     pie.forward(square_size / 4)
-    pie.write(
-        str(map_squares[label]["mines_near"]),
-        align="left",
-        font=("Comic Sans MS", round(square_size * 0.6), "normal"),
-    )
+    if map_squares[label]["mines_near"] == 0:
+        pdjeidj = 560606
+    else:
+        pie.write(
+            str(map_squares[label]["mines_near"]),
+            align="left",
+            font=("Comic Sans MS", round(square_size * 0.6), "normal"),
+        )
     pie.backward(square_size / 4)
     pie.right(90)
     pie.backward(square_size)
@@ -162,8 +170,6 @@ def add_mines(map_squares, map_size):
         for y in range(1, map_size + 1):
             if_mine = randint(1, 6)
             xy = str(x) + "," + str(y)
-            while xy in mines:
-                xy = str(x) + "," + str(y)
             if if_mine == 1:
                 map_squares[xy]["mine"] = True
                 mines.append(xy)
@@ -219,9 +225,10 @@ def make_numbers(map_squares, map_size):
 
 
 def play_game(map_squares, map_size, square_size, colist, not_mines, mines):
+    global opened_squares
 
     is_game_done = False
-    opened_squares = 0
+    opened_squares = []
     while not is_game_done:
         is_flag = False
         coords = input("What coordinates would you like to search? : ")
@@ -231,28 +238,90 @@ def play_game(map_squares, map_size, square_size, colist, not_mines, mines):
             f = f + "/"
         else:
             x = x1
-        while not isx or not isy:
-            if len(x1) >= 3 and 3 > len(str(y)) > 0:
+        while not isx or not isy or coords in opened_squares:
+            if len(str(x1)) >= 3 and 3 > len(str(y)) > 0:
                 is_flag = True
                 break
             coords = input("Those coordinates were invalid, please try again: ")
             isx, isy, x, y = ready_coords(coords, map_size)
+
+        if coords[0] == "f":
+            pdjeidj = 0
+        else:
+            win = check_if_win(not_mines, opened_squares)
+
         label = str(x) + "," + str(y)
+
+        # flag click
         if is_flag == True:
             check_if_flag(x1, y, square_size, colist)
-        elif map_squares[label]["mine"] == True:
+            return
+
+        # true cell click
+
+        # lose
+        if map_squares[label]["mine"] == True:
             print("BOOM! You lose! Maybe next time.")
             end_game(mines, square_size, colist)
             break
-        elif len(not_mines) == opened_squares:
+
+        # win
+        if win == True:
             print("You win!")
             open_square(square_size, x, y, map_squares, colist, label)
             break
 
-        else:
-            print(map_squares[label]["mines_near"])
-            opened_squares = opened_squares + 1
-            open_square(square_size, x, y, map_squares, colist, label)
+        # normal cell click
+        print(map_squares[label]["mines_near"])
+        open_all(square_size, x, y, map_squares, colist, 0)
+
+
+def open_all(square_size, x, y, map_squares, colist, level):
+    global opened_squares
+
+    label_a = str(x) + "," + str(y)
+    if label_a in opened_squares:
+        return
+
+    open_square(square_size, x, y, map_squares, colist, label_a)
+    open_zeroes(square_size, x, y, map_squares, colist, label_a, level)
+
+
+def open_zeroes(square_size, x, y, map_squares, colist, label, level):
+    global opened_squares
+
+    print(">>> Opening zeroes for -", x, y, label, level, len(opened_squares))
+    if map_squares[label]["mines_near"] != 0:
+        return
+
+    if label in opened_squares:
+        return
+
+    opened_squares.append(label)
+
+    level = level + 1
+
+    x1 = x + 1
+    x0 = x - 1
+    y1 = y + 1
+    y0 = y - 1
+
+    if x1 < map_size + 1:
+        open_all(square_size, x1, y, map_squares, colist, level)
+    if y1 < map_size + 1:
+        open_all(square_size, x, y1, map_squares, colist, level)
+    if x0 > 0:
+        open_all(square_size, x0, y, map_squares, colist, level)
+    if y0 > 0:
+        open_all(square_size, x, y0, map_squares, colist, level)
+    if x1 < map_size + 1 and y1 < map_size + 1:
+        open_all(square_size, x1, y1, map_squares, colist, level)
+    if x1 < map_size + 1 and y0 > 0:
+        open_all(square_size, x1, y0, map_squares, colist, level)
+    if x0 > 0 and y1 < map_size + 1:
+        open_all(square_size, x0, y1, map_squares, colist, level)
+    if x0 > 0 and y0 > 0:
+        open_all(square_size, x0, y0, map_squares, colist, level)
 
 
 def end_game(mines, square_size, colist):
@@ -276,6 +345,22 @@ def end_game(mines, square_size, colist):
         pie.goto(-250, 250)
 
 
+def check_if_win(not_mines, opened_squares):
+    checked = 0
+    not_mine_num = len(not_mines)
+    for not_mine in not_mines:
+        if_not_in = False
+        for opened in opened_squares:
+            if not_mine == opened:
+                checked += 1
+                if_not_in = True
+        if if_not_in == False:
+            return if_not_in
+    if checked == len(not_mines):
+        win = True
+        return win
+
+
 def ask_for_window_instruct():
     is_factor_valid = False
     while not is_factor_valid:
@@ -291,6 +376,14 @@ def ask_for_window_instruct():
                 print(close_window_factor, " is not a 'yes' or a 'no', try again")
 
 
+# def mouse_left(x, y):
+#     print("Left => X =", x, "Y =", y)
+
+
+# def mouse_right(x, y):
+#     print("Right => X =", x, "Y =", y)
+
+
 make_map(map_size, square_size, c)
 map_squares = create_map(map_size, square_size)
 map_squares, not_mines, mines = add_mines(map_squares, map_size)
@@ -298,5 +391,8 @@ empty_squares = check_mines(map_squares, map_size)
 map_squares = make_numbers(map_squares, map_size)
 play_game(map_squares, map_size, square_size, colist, not_mines, mines)
 
-ask_for_window_instruct()
+# turtle.onscreenclick(mouse_left, btn=1)
+# turtle.onscreenclick(mouse_right, btn=3)
+
+# ask_for_window_instruct()
 turtle.done()
