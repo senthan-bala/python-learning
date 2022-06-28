@@ -5,7 +5,7 @@ def add(x, y):
 def addAndDouble(x, y):
     s = x + y
     d = s * 2
-    # return d
+    return d
 
 
 # z = add(5, 10)

@@ -99,14 +99,14 @@ def find_winner(nila_x_pos, sanvi_x_pos, juhi_x_pos):
         sanvi.write(spaces + "It is a tie!!!")
         juhi.write(spaces + "It is a tie!!!")
     elif nila_x_pos >= 0 and juhi_x_pos >= 0:
-        nila.write(spaces + "I win!")
-        juhi.write(spaces + "I win!")
+        nila.write(spaces + "It is a tie!")
+        juhi.write(spaces + "It is a tie!")
     elif nila_x_pos >= 0 and sanvi_x_pos >= 0:
-        nila.write(spaces + "I win!")
-        sanvi.write(spaces + "I win!")
+        nila.write(spaces + "It is a tie!")
+        sanvi.write(spaces + "It is a tie!")
     elif juhi_x_pos >= 0 and sanvi_x_pos >= 0:
-        sanvi.write(spaces + "I win!")
-        juhi.write(spaces + "I win!")
+        sanvi.write(spaces + "It is a tie!")
+        juhi.write(spaces + "It is a tie!")
     elif nila_x_pos >= 0:
         nila.write(spaces + "I win!")
     elif juhi_x_pos >= 0:
