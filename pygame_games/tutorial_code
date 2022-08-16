@@ -57,23 +57,23 @@ def draw_screen(red,yellow,red_bullets,yellow_bullets,red_health,yellow_health):
     pygame.display.update()
 
 def red_sped(keys_pressed,red):
-    if keys_pressed[pygame.K_a] and red.x-SHIP_SPED+6>0:    # left
+    if keys_pressed[pygame.K_a] and red.x-SHIP_SPED+6>0:# left
         red.x-=SHIP_SPED
-    if keys_pressed[pygame.K_d] and red.x+SHIP_SPED+red.width-20 <BORDER.x:    # right
+    if keys_pressed[pygame.K_d] and red.x+SHIP_SPED+red.width-20 <BORDER.x:# right
         red.x+=SHIP_SPED
-    if keys_pressed[pygame.K_w] and red.y-SHIP_SPED+7>0:    # up
+    if keys_pressed[pygame.K_w] and red.y-SHIP_SPED+7>0:# up
         red.y-=SHIP_SPED
-    if keys_pressed[pygame.K_s] and red.y+SHIP_SPED+red.height+10<HEIGHT:    # down
+    if keys_pressed[pygame.K_s] and red.y+SHIP_SPED+red.height+10<HEIGHT:# down
         red.y+=SHIP_SPED
 
 def yellow_sped(keys_pressed,yellow):
-        if keys_pressed[pygame.K_LEFT] and yellow.x+SHIP_SPED-18>BORDER.x:    # left
+        if keys_pressed[pygame.K_LEFT] and yellow.x+SHIP_SPED-18>BORDER.x:# left
             yellow.x-=SHIP_SPED
-        if keys_pressed[pygame.K_RIGHT] and yellow.x+SHIP_SPED+yellow.width-25<WIDTH:    # right
+        if keys_pressed[pygame.K_RIGHT] and yellow.x+SHIP_SPED+yellow.width-25<WIDTH:# right
             yellow.x+=SHIP_SPED
-        if keys_pressed[pygame.K_UP]and yellow.y-SHIP_SPED+10>0:    # up
+        if keys_pressed[pygame.K_UP]and yellow.y-SHIP_SPED+10>0:# up
             yellow.y-=SHIP_SPED
-        if keys_pressed[pygame.K_DOWN] and yellow.y+SHIP_SPED+yellow.height+10<HEIGHT:    # down
+        if keys_pressed[pygame.K_DOWN] and yellow.y+SHIP_SPED+yellow.height+10<HEIGHT:  # down
             yellow.y+=SHIP_SPED
 
 
@@ -126,11 +126,9 @@ def main_loop():
                     bullet=pygame.Rect(yellow.x,yellow.y+(yellow.height/2)-2,10,4)
                     yellow_bullets.append(bullet)
                     BULLET_FIRE_SOUND.play()
-                
             if event.type==RED_HIT:
                 red_health-=1
                 BULLET_HIT_SOUND.play()
-            
             if event.type==YELLOW_HIT:
                 yellow_health-=1
                 BULLET_HIT_SOUND.play()

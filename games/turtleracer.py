@@ -1,5 +1,6 @@
 import turtle
 from random import randint
+import pygame
 
 
 def create_turtle():
@@ -55,9 +56,9 @@ def make_full_track():
         tt.hideturtle()
 
 
-nila_step_size = randint(35, 45)
-sanvi_step_size = randint(35, 45)
-juhi_step_size = randint(35, 45)
+nila_step_size = randint(5, 5)
+sanvi_step_size = randint(5, 5)
+juhi_step_size = randint(5, 5)
 
 
 def get_start_pos():
@@ -120,6 +121,7 @@ def start_racing():
     sanvi_x_pos = get_start_pos()
     juhi_x_pos = get_start_pos()
     while is_race_still_on(nila_x_pos, sanvi_x_pos, juhi_x_pos):
+        pygame.time.delay(100)
         nila.forward(nila_step_size)
         nila_x_pos = nila_x_pos + nila_step_size
         sanvi.forward(sanvi_step_size)

@@ -1,6 +1,9 @@
 from random import randint
-
+# from pygame import mixer 
+import os
 map_size = 10
+# mixer.init()
+
 
 
 def check_if_num(subject, map_size):
@@ -91,6 +94,7 @@ def make_numbers(map_squares, map_size):
 
 
 def play_game(map_squares, map_size):
+    # lose_sound=mixer.Sound(os.path.join("pygame_stuff\\womp-womp.zip"))
     is_game_done = False
     while not is_game_done:
         coords = input("What coordinates would you like to search? : ")
@@ -100,6 +104,7 @@ def play_game(map_squares, map_size):
             isx, isy, x, y = ready_coords(coords, map_size)
         label = str(x) + "," + str(y)
         if map_squares[label]["mine"] == True:
+            # lose_sound.play()
             print("BOOM! You lose! Maybe next time.")
             break
         else:

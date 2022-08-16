@@ -111,8 +111,8 @@ def handle_balls(red,blue,ball,x,y,sped,racket_sped):
         sped+=.04
         racket_sped=sped+og_racket_sped
         x=-x*sped
-    ball.x+=x*10
-    ball.y+=y*10
+    ball.x+=x
+    ball.y+=y
     return x,y,racket_sped,sped
 
 

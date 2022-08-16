@@ -6,10 +6,10 @@ tina.pensize(3)
 tina.speed(100000000000000)
 
 # number of squares in a row/column.
-m = 5
+m =1
 
 # size of small square
-z = 75
+z = 500
 
 
 def draw_square(x, y):

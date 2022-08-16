@@ -1,5 +1,6 @@
 from random import randint
 import turtle
+from math import sqrt
 
 pie = turtle.Turtle()
 pie.shape("turtle")
@@ -7,28 +8,70 @@ pie.pensize(3)
 pie.speed(35)
 pie.penup()
 pie.goto(-250, 250)
-map_size = 5
+map_size = 10
+pie.hideturtle()
 square_size = 500 / map_size
-c = "papaya whip"
-colist = [
-    "ivory",
-    "blue",
-    "lime",
-    "red",
-    "deep pink",
-    "maroon",
-    "golden",
-    "gray",
-    "blue violet",
-    "black",
-    "red",
-]
 
 
-opened_squares = []
+pallet_not_confirmed=True
+while pallet_not_confirmed:
+    c_pallet=input("What color pallet do you want?:")
+    c_pallet.strip(" ")
+    if c_pallet.isalpha()==True:
+        pallet_not_confirmed=False
+        c_pallet = c_pallet.lower()
+        ispallet=False
+
+        while ispallet==False:
+            if c_pallet=="normal":
+                kill_col="red"
+                line_col="black"
+                c = "papaya whip"
+                colist = [
+                    "ivory",
+                    "blue",
+                    "lime",
+                    "red",
+                    "deep pink",
+                    "maroon",
+                    "golden",
+                    "gray",
+                    "blue violet",
+                    "black",
+                    "red",
+                ]
+                ispallet=True
+                pallet_not_confirmed=False
+            elif c_pallet=="rainbow":
+                kill_col="red"
+                line_col="white"
+                c = "black"
+                colist = [
+                    "ivory",
+                    "red",
+                    "orange",
+                    "yellow",
+                    "green",
+                    "aquamarine",
+                    "blue",
+                    "blue violet",
+                    "magenta",
+                    "grey",
+                    "white",
+                ]
+                ispallet=True
+                pallet_not_confirmed=False
+            else:
+                ispallet=False
+                pallet_not_confirmed=True
+                print("please type a valid pallet")
+    else:
+        pallet_not_confirmed=True
+        print("please type a word")
 
 
-def make_map(map_size, square_size, col):
+
+def make_map(map_size, square_size, col, line_c):
     pie.pendown()
     pie.fillcolor(col)
     pie.begin_fill()
@@ -37,6 +80,7 @@ def make_map(map_size, square_size, col):
         pie.right(90)
     pie.right(90)
     pie.end_fill()
+    pie.color(line_c)
     for i in range(map_size):
         pie.forward(500)
         pie.backward(500)
@@ -68,9 +112,9 @@ def check_if_num(subject, map_size):
 
 
 def ready_coords(coords, map_size):
-    x, y = coords.split(",")
-    x = x.strip()
-    y = y.strip()
+    y, x = coords.split(",")
+    x = x.strip(" ")
+    y = y.strip(" ")
     isx = check_if_num(x, map_size)
     isy = check_if_num(y, map_size)
     if isx == True:
@@ -81,14 +125,15 @@ def ready_coords(coords, map_size):
 
 
 def open_square(square_size, x, y, map_squares, colist, label):
-    x = int(x)
-    y = int(y)
-    mx = x - 1
-    my = y - 1
-    pie.forward(mx * square_size)
-    pie.left(90)
+    zy = int(x)
+    zx = int(y)
+    rev_label=str(x)+","+str(y)
+    mx = zy - 1
+    my = zx - 1
     pie.forward(my * square_size)
-    pie.fillcolor(colist[map_squares[label]["mines_near"]])
+    pie.left(90)
+    pie.forward(mx * square_size)
+    pie.fillcolor(colist[map_squares[rev_label]["mines_near"]])
     pie.begin_fill()
     pie.pendown()
     for i in range(5):
@@ -104,11 +149,11 @@ def open_square(square_size, x, y, map_squares, colist, label):
     pie.forward(square_size)
     pie.left(90)
     pie.forward(square_size / 4)
-    if map_squares[label]["mines_near"] == 0:
+    if map_squares[rev_label]["mines_near"] == 0:
         pdjeidj = 560606
     else:
         pie.write(
-            str(map_squares[label]["mines_near"]),
+            str(map_squares[rev_label]["mines_near"]),
             align="left",
             font=("Comic Sans MS", round(square_size * 0.6), "normal"),
         )
@@ -143,13 +188,17 @@ def flag(x, y, square_size, colist):
     pie.left(70)
     pie.goto(-250, 250)
     pie.color(colist[9])
+    flag_marker=True
+    return flag_marker
 
 
 def check_if_flag(x, y, square_size, colist):
+    flag_marker=False
     if x[0] == "f":
         if x[1] == "/":
             f, x = x.split("/")
-            flag(int(x), y, square_size, colist)
+            flag_marker=flag(int(x), y, square_size, colist)
+    return flag_marker
 
 
 def create_map(map_size, square_size):
@@ -169,7 +218,7 @@ def add_mines(map_squares, map_size):
     for x in range(1, map_size + 1):
         for y in range(1, map_size + 1):
             if_mine = randint(1, 6)
-            xy = str(x) + "," + str(y)
+            xy = str(y) + "," + str(x)
             if if_mine == 1:
                 map_squares[xy]["mine"] = True
                 mines.append(xy)
@@ -224,20 +273,22 @@ def make_numbers(map_squares, map_size):
     return map_squares
 
 
-def play_game(map_squares, map_size, square_size, colist, not_mines, mines):
+def play_game(map_squares, map_size, square_size, colist, not_mines, mines,kfc):
     global opened_squares
-
     is_game_done = False
     opened_squares = []
     while not is_game_done:
+        flag_marker=False
         is_flag = False
         coords = input("What coordinates would you like to search? : ")
         isx, isy, x1, y = ready_coords(coords, map_size)
         if len(str(x1)) >= 3:
             f, x = x1.split("/")
             f = f + "/"
+        
         else:
             x = x1
+
         while not isx or not isy or coords in opened_squares:
             if len(str(x1)) >= 3 and 3 > len(str(y)) > 0:
                 is_flag = True
@@ -254,15 +305,16 @@ def play_game(map_squares, map_size, square_size, colist, not_mines, mines):
 
         # flag click
         if is_flag == True:
-            check_if_flag(x1, y, square_size, colist)
-            return
+            flag_marker=check_if_flag(x1, y, square_size, colist)
+        juycwwwefvc=1
+         
 
         # true cell click
 
         # lose
-        if map_squares[label]["mine"] == True:
+        if map_squares[label]["mine"] == True and flag_marker==False:
             print("BOOM! You lose! Maybe next time.")
-            end_game(mines, square_size, colist)
+            end_game(mines, square_size, colist,kfc)
             break
 
         # win
@@ -271,16 +323,23 @@ def play_game(map_squares, map_size, square_size, colist, not_mines, mines):
             open_square(square_size, x, y, map_squares, colist, label)
             break
 
+        kqyewbrckuqy=23
+
         # normal cell click
-        print(map_squares[label]["mines_near"])
-        open_all(square_size, x, y, map_squares, colist, 0)
+        if flag_marker==False:
+            print(map_squares[label]["mines_near"])
+            open_all(square_size, x, y, map_squares, colist, 0)
+            buybjhbyhjbbbbbiaaaaaaaaa=4334
+            rev_coords=x,",",y
+            jyyvvhuhnhhnhnhnhnhnh=45
+            opened_squares.append(rev_coords)
 
 
 def open_all(square_size, x, y, map_squares, colist, level):
     global opened_squares
 
-    label_a = str(x) + "," + str(y)
-    if label_a in opened_squares:
+    label_a = str(y) + "," + str(x)
+    if label_a in opened_squares or map_squares[label_a]["mine"]==True:
         return
 
     open_square(square_size, x, y, map_squares, colist, label_a)
@@ -290,21 +349,21 @@ def open_all(square_size, x, y, map_squares, colist, level):
 def open_zeroes(square_size, x, y, map_squares, colist, label, level):
     global opened_squares
 
-    print(">>> Opening zeroes for -", x, y, label, level, len(opened_squares))
     if map_squares[label]["mines_near"] != 0:
         return
 
     if label in opened_squares:
         return
 
-    opened_squares.append(label)
+    rev_label=str(y)+","+str(x)
+    opened_squares.append(rev_label)
 
     level = level + 1
 
-    x1 = x + 1
-    x0 = x - 1
-    y1 = y + 1
-    y0 = y - 1
+    x1 = int(x) + 1  
+    x0 = int(x) - 1
+    y1 = int(y) + 1
+    y0 = int(y) - 1
 
     if x1 < map_size + 1:
         open_all(square_size, x1, y, map_squares, colist, level)
@@ -324,12 +383,11 @@ def open_zeroes(square_size, x, y, map_squares, colist, label, level):
         open_all(square_size, x0, y0, map_squares, colist, level)
 
 
-def end_game(mines, square_size, colist):
+def end_game(mines, square_size, colist,kfc):
     for mine in mines:
-        pie.pendown()
         x, y = mine.split(",")
-        x1 = int(x) - 1
-        y1 = int(y) - 1
+        x1 = int(y) - 1
+        y1 = int(x) - 1
         x2 = x1 * square_size
         y2 = y1 * square_size
         pie.forward(x2)
@@ -337,11 +395,27 @@ def end_game(mines, square_size, colist):
         pie.forward(y2)
         pie.fillcolor(colist[9])
         pie.begin_fill()
+        pie.pendown()
         for i in range(5):
             pie.forward(square_size)
             pie.right(90)
         pie.end_fill()
+        pie.color(kfc)
+        if mines[0]==mine:
+            for i in range(4):
+                pie.forward(square_size)
+                pie.right(90)
+        pie.pendown()
+        pie.color(kfc)
+        pie.right(45)
+        pie.forward(square_size*sqrt(2))
+        pie.right(135)
+        pie.forward(square_size)
+        pie.right(135)
+        pie.forward(square_size*sqrt(2))
+        pie.right(45)
         pie.penup()
+        pie.backward(square_size)
         pie.goto(-250, 250)
 
 
@@ -384,12 +458,12 @@ def ask_for_window_instruct():
 #     print("Right => X =", x, "Y =", y)
 
 
-make_map(map_size, square_size, c)
+make_map(map_size, square_size, c, line_col)
 map_squares = create_map(map_size, square_size)
 map_squares, not_mines, mines = add_mines(map_squares, map_size)
 empty_squares = check_mines(map_squares, map_size)
 map_squares = make_numbers(map_squares, map_size)
-play_game(map_squares, map_size, square_size, colist, not_mines, mines)
+play_game(map_squares, map_size, square_size, colist, not_mines, mines,kill_col)
 
 # turtle.onscreenclick(mouse_left, btn=1)
 # turtle.onscreenclick(mouse_right, btn=3)
