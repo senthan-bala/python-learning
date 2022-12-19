@@ -7,9 +7,9 @@ pie.pensize(3)
 pie.speed(35)
 pie.penup()
 pie.goto(-250, 250)
-map_size = 5
+map_size = 10
 square_size = 500 / map_size
-c = "papaya whip"
+c = "dark grey"
 colist = [
     "ivory",
     "blue",
@@ -168,7 +168,7 @@ def add_mines(map_squares, map_size):
     not_mines = []
     for x in range(1, map_size + 1):
         for y in range(1, map_size + 1):
-            if_mine = randint(1, 6)
+            if_mine = randint(1, 4)
             xy = str(x) + "," + str(y)
             if if_mine == 1:
                 map_squares[xy]["mine"] = True
@@ -245,17 +245,19 @@ def play_game(map_squares, map_size, square_size, colist, not_mines, mines):
             coords = input("Those coordinates were invalid, please try again: ")
             isx, isy, x, y = ready_coords(coords, map_size)
 
+        label = str(x) + "," + str(y)
+
         if coords[0] == "f":
             pdjeidj = 0
         else:
+            opened_squares.append(label)
             win = check_if_win(not_mines, opened_squares)
-
-        label = str(x) + "," + str(y)
+            opened_squares.remove(label)
 
         # flag click
         if is_flag == True:
             check_if_flag(x1, y, square_size, colist)
-            return
+            continue
 
         # true cell click
 
@@ -265,15 +267,14 @@ def play_game(map_squares, map_size, square_size, colist, not_mines, mines):
             end_game(mines, square_size, colist)
             break
 
-        # win
-        if win == True:
-            print("You win!")
-            open_square(square_size, x, y, map_squares, colist, label)
-            break
-
         # normal cell click
         print(map_squares[label]["mines_near"])
         open_all(square_size, x, y, map_squares, colist, 0)
+
+        # win
+        if win == True:
+            print("You win!")
+            break
 
 
 def open_all(square_size, x, y, map_squares, colist, level):
@@ -290,8 +291,8 @@ def open_all(square_size, x, y, map_squares, colist, level):
 def open_zeroes(square_size, x, y, map_squares, colist, label, level):
     global opened_squares
 
-    print(">>> Opening zeroes for -", x, y, label, level, len(opened_squares))
     if map_squares[label]["mines_near"] != 0:
+        opened_squares.append(label)
         return
 
     if label in opened_squares:
@@ -347,7 +348,6 @@ def end_game(mines, square_size, colist):
 
 def check_if_win(not_mines, opened_squares):
     checked = 0
-    not_mine_num = len(not_mines)
     for not_mine in not_mines:
         if_not_in = False
         for opened in opened_squares:

@@ -92,7 +92,7 @@ while is_clock_active:
         hours -= 12
     second_angle = 360 / 60 * seconds
     minute_angle = 360 / 60 * minutes
-    hour_angle = 360 / 12 * hours + (minute_angle / 6)
+    hour_angle = (360 / 12 * hours + (minute_angle / 6)) - 30
     if seconds == 0:
         seconds_old = 0
         make_erase_hand(

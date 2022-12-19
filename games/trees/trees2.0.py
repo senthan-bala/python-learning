@@ -1,10 +1,10 @@
 import turtle
 
-speed = 20000000000000
+speed = 200
 base = 75
 adj = 10
-stump_width = 30
-stump_height = 50
+stump_width = 15
+stump_height = 5
 
 
 leaf_colors = ["green", "cyan", "orange", "purple"]

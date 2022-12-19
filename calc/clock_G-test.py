@@ -11,8 +11,8 @@ h_color = "red"
 m_color = "grey"
 erase_color = "white"
 
-min_len = radius / 2 + (radius / 10)
-hour_len = (radius / 5) * 2
+m_length = radius / 2 + (radius / 10)
+h_length = (radius / 5) * 2
 timeExists = False
 
 
@@ -20,14 +20,16 @@ def take_time():
     time = input("What time would you like?:")
 
     if timeExists:
-        erase_hand(h_angle, m_angle, hour_len, min_len, hand_color, erase_color)
+        erase_hand(h_angle, m_angle)
 
     hours, minutes = time.split(":")
     hours = int(hours)
     minutes = int(minutes)
     minute_angle = minutes * 6
-    while hours >= 12:
+    if hours >= 12:
         hours = hours % 12
+    if minutes >= 60:
+        minutes = minutes % 60
     hour_angle = hours * 30
     hour_angle = hour_angle + (minutes * 0.5)
     return hour_angle, minute_angle
@@ -74,16 +76,17 @@ def make_hand(angle, length, color):
     tina.penup()
 
 
-def put_hands(h_angle, m_angle, h_length, m_length, color):
+def put_hands(h_angle, m_angle):
     global timeExists
     timeExists = True
-    make_hand(h_angle, h_length, color)
-    make_hand(m_angle, m_length, color)
+    make_hand(h_angle, h_length, h_color)
+    make_hand(m_angle, m_length, m_color)
 
 
-def erase_hand(h_angle, m_angle, h_length, m_length, color, e_color):
+def erase_hand(h_angle, m_angle):
     global timeExists
-    put_hands(h_angle, m_angle, h_length, m_length, e_color)
+    make_hand(h_angle, h_length, erase_color)
+    make_hand(m_angle, m_length, erase_color)
     timeExists = False
 
 
@@ -91,7 +94,7 @@ make_clock(radius)
 for i in range(10):
     h_angle, m_angle = take_time()
     print(h_angle, m_angle)
-    put_hands(h_angle, m_angle, hour_len, min_len, hand_color)
+    put_hands(h_angle, m_angle)
 
 
 turtle.done()
