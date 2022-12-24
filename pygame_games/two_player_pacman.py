@@ -42,8 +42,8 @@ def main_loop():
     frames = 0
     seconds = 0
     minutes = 0
-    red = pygame.Rect(100, 100, square_size, square_size)
-    blue = pygame.Rect(500, 100, square_size, square_size)
+    red = pygame.Rect(width - square_size, 0, square_size, square_size)
+    blue = pygame.Rect(0, 0, square_size, square_size)
     clock = pygame.time.Clock()
     run = True
     while run:
