@@ -6,14 +6,16 @@ from random import randint
 pygame.font.init()
 # pygame.mixer.init()
 
+# main variables
 fps = 60
 width = 900
 height = 500
-window = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Two Player Pacman")
 square_size = 20
 square_speed = 2
+obstacle_count = 25
+obstacle_kills = False
 black = (0, 0, 0)
+
 # blue_surface = pygame.transform.scale(
 #     pygame.image.load(os.path.join("pygame_stuff", "blue_square.jpg")),
 #     (square_size, square_size),
@@ -22,68 +24,21 @@ black = (0, 0, 0)
 #     pygame.image.load(os.path.join("pygame_stuff", "red_square.jpg")),
 #     (square_size, square_size),
 # )
+
+window = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Two Player Pacman")
+
 font = pygame.font.Font("freesansbold.ttf", 15)
 end_font = pygame.font.Font("freesansbold.ttf", 70)
 well_done_font = pygame.font.Font("freesansbold.ttf", 35)
 
-text = font.render("sampletext", True, (0, 0, 0), (255, 255, 255))
-textRect = text.get_rect()
-textRect.center = (50, 15)
-
-
-def draw_screen(
-    red,
-    blue,
-    text,
-    textrect,
-    one,
-    two,
-    three,
-    four,
-    five,
-    six,
-    seven,
-    eight,
-    nine,
-    ten,
-    eleven,
-    twelve,
-):
-    window.fill((255, 255, 255))
-    window.blit(text, textrect)
-    pygame.draw.rect(window, (255, 0, 0), red)
-    pygame.draw.rect(window, (0, 0, 255), blue)
-    # obstacles
-    pygame.draw.rect(window, black, one)
-    pygame.draw.rect(window, black, two)
-    pygame.draw.rect(window, black, three)
-    pygame.draw.rect(window, black, four)
-    pygame.draw.rect(window, black, five)
-    pygame.draw.rect(window, black, six)
-    pygame.draw.rect(window, black, seven)
-    pygame.draw.rect(window, black, eight)
-    pygame.draw.rect(window, black, nine)
-    pygame.draw.rect(window, black, ten)
-    pygame.draw.rect(window, black, eleven)
-    pygame.draw.rect(window, black, twelve)
-    pygame.display.update()
+# text = font.render("sampletext", True, (0, 0, 0), (255, 255, 255))
+# textRect = text.get_rect()
+# textRect.center = (50, 15)
 
 
 def main_loop():
-    (
-        one,
-        two,
-        three,
-        four,
-        five,
-        six,
-        seven,
-        eight,
-        nine,
-        ten,
-        eleven,
-        twelve,
-    ) = create_obstacles()
+    obstacles = create_obstacles()
     frames = 0
     seconds = 0
     minutes = 0
@@ -108,52 +63,83 @@ def main_loop():
             minutes += 1
             seconds -= 60
         keys_pressed = pygame.key.get_pressed()
-        square_movements(red, blue, keys_pressed)
-        collide = check_for_square_collision(red, blue)
+        # TODO - handle movement only for the object for which key pressed
+        square_movements(red, blue, keys_pressed, obstacles, minutes, seconds)
+        players_collide = check_for_square_collision(red, blue)
         draw_screen(
             red,
             blue,
             current_time,
             textrect,
-            one,
-            two,
-            three,
-            four,
-            five,
-            six,
-            seven,
-            eight,
-            nine,
-            ten,
-            eleven,
-            twelve,
+            obstacles,
         )
         frames += 1
-        if collide == True:
-            finish_game(minutes, seconds)
+        if players_collide == True:
+            finish_game(minutes, seconds, False)
             run = False
 
 
-def square_movements(red, blue, keys):
+def square_movements(red, blue, keys, obstacles, minutes, seconds):
     # TODO - do not pass through obstacles
     # for red
     if keys[pygame.K_UP] and red.y - square_speed > 0:
         red.y -= square_speed
+        collide = check_for_obj_collision(red, obstacles)
+        if collide == True and obstacle_kills == False:
+            red.y += square_speed
+        elif collide == True and obstacle_kills == True:
+            finish_game(minutes, seconds, True)
     if keys[pygame.K_DOWN] and red.y + square_speed + square_size < height:
         red.y += square_speed
+        collide = check_for_obj_collision(red, obstacles)
+        if collide == True and obstacle_kills == False:
+            red.y -= square_speed
+        elif collide == True and obstacle_kills == True:
+            finish_game(minutes, seconds, True)
     if keys[pygame.K_LEFT] and red.x - square_speed > 0:
         red.x -= square_speed
+        collide = check_for_obj_collision(red, obstacles)
+        if collide == True and obstacle_kills == False:
+            red.x += square_speed
+        elif collide == True and obstacle_kills == True:
+            finish_game(minutes, seconds, True)
     if keys[pygame.K_RIGHT] and red.x + square_speed + square_size < width:
         red.x += square_speed
+        collide = check_for_obj_collision(red, obstacles)
+        if collide == True and obstacle_kills == False:
+            red.x -= square_speed
+        elif collide == True and obstacle_kills == True:
+            finish_game(minutes, seconds, True)
+
     # for blue
     if keys[pygame.K_w] and blue.y - square_speed > 0:
         blue.y -= square_speed
+        collide = check_for_obj_collision(blue, obstacles)
+        if collide == True and obstacle_kills == False:
+            blue.y += square_speed
+        elif collide == True and obstacle_kills == True:
+            finish_game(minutes, seconds, False)
     if keys[pygame.K_s] and blue.y + square_speed + square_size < height:
         blue.y += square_speed
+        collide = check_for_obj_collision(blue, obstacles)
+        if collide == True and obstacle_kills == False:
+            blue.y -= square_speed
+        elif collide == True and obstacle_kills == True:
+            finish_game(minutes, seconds, False)
     if keys[pygame.K_a] and blue.x - square_speed > 0:
         blue.x -= square_speed
+        collide = check_for_obj_collision(blue, obstacles)
+        if collide == True and obstacle_kills == False:
+            blue.x += square_speed
+        elif collide == True and obstacle_kills == True:
+            finish_game(minutes, seconds, False)
     if keys[pygame.K_d] and blue.x + square_speed + square_size < width:
         blue.x += square_speed
+        collide = check_for_obj_collision(blue, obstacles)
+        if collide == True and obstacle_kills == False:
+            blue.x -= square_speed
+        elif collide == True and obstacle_kills == True:
+            finish_game(minutes, seconds, False)
 
 
 def turn_time_into_text(mins, secs):
@@ -170,71 +156,82 @@ def turn_time_into_text(mins, secs):
     return tim
 
 
-def check_for_square_collision(red, blue):
+def check_for_square_collision(obj1, obj2):
     collide = False
-    if blue.colliderect(red):
+    if obj1.colliderect(obj2):
         collide = True
     return collide
 
 
-def finish_game(minutes, seconds):
+def check_for_obj_collision(square, obj_list):
+    collide = False
+    for obj in obj_list:
+        if square.colliderect(obj):
+            collide = True
+    return collide
+
+
+def finish_game(minutes, seconds, is_red_ded):
     window.fill((255, 255, 255))
-    stopwatch_time = turn_time_into_text(minutes, seconds)
-    end_message = "Your final time was " + stopwatch_time
-    final_time = end_font.render(end_message, True, (0, 0, 0), (255, 255, 255))
-    textrect = final_time.get_rect()
-    textrect.center = (width / 2, height / 2)
-    window.blit(final_time, textrect)
-    if minutes >= 2:
-        well_done_text = well_done_font.render(
-            "Well done!", False, (0, 0, 0), (255, 255, 255)
-        )
-        well_done = well_done_text.get_rect()
-        well_done.center = (width / 2, (height / 2) + 140)
-        window.blit(well_done_text, well_done)
+    if is_red_ded == False:
+        stopwatch_time = turn_time_into_text(minutes, seconds)
+        end_message = "Your final time was " + stopwatch_time
+        final_time = end_font.render(end_message, True, (0, 0, 0), (255, 255, 255))
+        textrect = final_time.get_rect()
+        textrect.center = (width / 2, height / 2)
+        window.blit(final_time, textrect)
+        if minutes >= 1:
+            well_done_text = well_done_font.render(
+                "Well done!", False, (0, 0, 0), (255, 255, 255)
+            )
+            well_done = well_done_text.get_rect()
+            well_done.center = (width / 2, (height / 2) + 140)
+            window.blit(well_done_text, well_done)
+    elif is_red_ded == True:
+        end_message = "Blue Wins!"
+        final_time = end_font.render(end_message, True, (0, 0, 0), (255, 255, 255))
+        textrect = final_time.get_rect()
+        textrect.center = (width / 2, height / 2)
+        window.blit(final_time, textrect)
     pygame.display.update()
     pygame.time.delay(4500)
 
 
 def create_obstacles():
-    # TODO - change to list
-    one = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
+    obs_position = (square_size, width, square_size, height)
+    obs_dimension = (20, 125, 20, 125)
+    return [create_obstacle(obs_position, obs_dimension) for i in range(obstacle_count)]
+
+
+def create_obstacle(obs_position, obs_dimension):
+    (x_min, x_max, y_min, y_max) = obs_position
+    (w_min, w_max, h_min, h_max) = obs_dimension
+    return pygame.Rect(
+        randint(x_min, x_max),
+        randint(y_min, y_max),
+        randint(w_min, w_max),
+        randint(h_min, h_max),
     )
-    two = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    three = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    four = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    five = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    six = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    seven = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    eight = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    nine = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    ten = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    eleven = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    twelve = pygame.Rect(
-        randint(100, 850), randint(100, 450), randint(20, 100), randint(20, 100)
-    )
-    return one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve
+
+
+def draw_screen(
+    red,
+    blue,
+    text,
+    textrect,
+    obstacles,
+):
+    window.fill((255, 255, 255))
+    window.blit(text, textrect)
+    pygame.draw.rect(window, (255, 0, 0), red)
+    pygame.draw.rect(window, (0, 0, 255), blue)
+    # obstacles
+    [draw_rect(obstacle) for obstacle in obstacles]
+    pygame.display.update()
+
+
+def draw_rect(obstacle):
+    pygame.draw.rect(window, black, obstacle)
 
 
 main_loop()
