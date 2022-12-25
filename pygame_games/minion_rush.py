@@ -1,11 +1,12 @@
 import pygame
-import os
+
+# import os
 from random import randint
 
 # from random import choice
 
 pygame.font.init()
-pygame.mixer.init()
+# pygame.mixer.init()
 
 fps = 1
 width = 400
@@ -17,15 +18,14 @@ road_width = 50
 minion_sped = road_width + 5
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Minion Rush")
-# soundtrack = pygame.mixer.Sound(os.path.join("pygame_stuff", "minion_soundtrack.mp3"))
+# soundtrack = pygame.mixer.Sound("pygame_stuff/minion_soundtrack.mp3")
 font = pygame.font.Font("freesansbold.ttf", 15)
-end_font = pygame.font.Font("freesansbold.ttf", 70)
-well_done_font = pygame.font.Font("freesansbold.ttf", 35)
+end_font = pygame.font.Font("freesansbold.ttf", 25)
 
 
 def main_loop():
     score = 0
-    obj_speed = 3
+    obj_speed = 2
     frames = 0
     start = False
     minion = pygame.Rect(
@@ -38,10 +38,6 @@ def main_loop():
     obj2 = pygame.Rect(185, -randint(400, 10000), minion_size - 10, minion_size - 10)
     obj3 = pygame.Rect(240, -randint(400, 10000), minion_size - 10, minion_size - 10)
     obj4 = pygame.Rect(130, -randint(400, 10000), minion_size - 10, minion_size - 10)
-    # obj5 = pygame.Rect(180, -randint(500, 700), minion_size - 15, minion_size - 15)
-    # obj6 = pygame.Rect(235, -randint(100, 300), minion_size - 15, minion_size - 15)
-    # obj_list = [obj1, obj2, obj3, obj4]
-    # if obj_speed >= 4:
     obj_list = [obj1, obj2, obj3, obj4]
     road1 = pygame.Rect((width / 2) - 80, 0, road_width, height * 2)
     road2 = pygame.Rect((width / 2) - (road_width / 2), 0, road_width, height * 2)
@@ -59,12 +55,14 @@ def main_loop():
             if event.type == pygame.KEYDOWN:
                 minion_movements(event, minion, road_base)
         run = detect_for_collision(minion, obj_list)
-        send_objects(obj_list, obj_speed, score)
+        score = send_objects(obj_list, obj_speed, score)
         draw_screen(
             minion, road1, road2, road3, road_base, obj_list, scorerect, current_score
         )
         if start == False:
             start = ask_to_start()
+            # if start == True:
+            # soundtrack.play()
         frames += 1
         if frames == 9000:
             frames -= 9000
@@ -117,19 +115,23 @@ def minion_movements(event, minion, road_base):
 
 
 def send_objects(obj_list, obj_speed, score):
-    [send_obj(obj, obj_speed, score) for obj in obj_list]
+    for obj in obj_list:
+        score = send_obj(obj, obj_speed, score)
     obj1, obj2, obj3, obj4 = obj_list
-    if abs(obj2.y - obj3.y) <= 100 and (
-        abs(obj2.y - obj1.y) <= 100 or abs(obj2.y - obj4.y) <= 100
+    if abs(obj2.y - obj3.y) <= 150 and (
+        abs(obj2.y - obj1.y) <= 150 or abs(obj2.y - obj4.y) <= 150
     ):
-        obj2.y -= 200
+        obj2.y -= 250
+    return score
 
 
 def send_obj(obj, obj_speed, score):
-    if obj.y <= height:
+    if obj.y < -200:
+        obj.y += obj_speed + 40
+    elif obj.y <= height and obj.y >= -200:
         obj.y += obj_speed
     elif obj.y > height:
-        obj.y = -randint(randint(100, 600), randint(700, 1500))
+        obj.y = -randint(100, 10000)
         score += 100
     return score
 
@@ -144,15 +146,13 @@ def detect_for_collision(minion, obj_list):
 
 def finish_game(score):
     window.fill((255, 255, 255))
-    end_message = "Your final score was " + score
+    end_message = "Your final score was " + str(score)
     final_time = end_font.render(end_message, True, (0, 0, 0), (255, 255, 255))
     textrect = final_time.get_rect()
     textrect.center = (width / 2, height / 2)
     window.blit(final_time, textrect)
-    if score >= 5000:
-        well_done_text = well_done_font.render(
-            "Well done!", False, (0, 0, 0), (255, 255, 255)
-        )
+    if score >= 15000:
+        well_done_text = font.render("Well done!", False, (0, 0, 0), (255, 255, 255))
         well_done = well_done_text.get_rect()
         well_done.center = (width / 2, (height / 2) + 140)
         window.blit(well_done_text, well_done)

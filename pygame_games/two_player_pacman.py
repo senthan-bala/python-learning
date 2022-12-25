@@ -4,7 +4,6 @@ import pygame
 from random import randint
 
 pygame.font.init()
-# pygame.mixer.init()
 
 # main variables
 fps = 60
@@ -16,25 +15,12 @@ obstacle_count = 25
 obstacle_kills = False
 black = (0, 0, 0)
 
-# blue_surface = pygame.transform.scale(
-#     pygame.image.load(os.path.join("pygame_stuff", "blue_square.jpg")),
-#     (square_size, square_size),
-# )
-# red_surface = pygame.transform.scale(
-#     pygame.image.load(os.path.join("pygame_stuff", "red_square.jpg")),
-#     (square_size, square_size),
-# )
-
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Two Player Pacman")
 
 font = pygame.font.Font("freesansbold.ttf", 15)
 end_font = pygame.font.Font("freesansbold.ttf", 70)
 well_done_font = pygame.font.Font("freesansbold.ttf", 35)
-
-# text = font.render("sampletext", True, (0, 0, 0), (255, 255, 255))
-# textRect = text.get_rect()
-# textRect.center = (50, 15)
 
 
 def main_loop():
@@ -63,7 +49,6 @@ def main_loop():
             minutes += 1
             seconds -= 60
         keys_pressed = pygame.key.get_pressed()
-        # TODO - handle movement only for the object for which key pressed
         square_movements(red, blue, keys_pressed, obstacles, minutes, seconds)
         players_collide = check_for_square_collision(red, blue)
         draw_screen(
@@ -80,7 +65,6 @@ def main_loop():
 
 
 def square_movements(red, blue, keys, obstacles, minutes, seconds):
-    # TODO - do not pass through obstacles
     # for red
     if keys[pygame.K_UP] and red.y - square_speed > 0:
         red.y -= square_speed

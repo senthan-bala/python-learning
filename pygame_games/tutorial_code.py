@@ -151,19 +151,19 @@ def main_loop():
                         red.x + red.width - 10, red.y + (red.height / 2) - 2, 10, 4
                     )
                     red_bullets.append(bullet)
-                    # BULLET_FIRE_SOUND.play()
+                    BULLET_FIRE_SOUND.play()
                 if event.key == pygame.K_RCTRL and len(yellow_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(
                         yellow.x, yellow.y + (yellow.height / 2) - 2, 10, 4
                     )
                     yellow_bullets.append(bullet)
-                    # BULLET_FIRE_SOUND.play()
+                    BULLET_FIRE_SOUND.play()
             if event.type == RED_HIT:
                 red_health -= 1
-                # BULLET_HIT_SOUND.play()
+                BULLET_HIT_SOUND.play()
             if event.type == YELLOW_HIT:
                 yellow_health -= 1
-                # BULLET_HIT_SOUND.play()
+                BULLET_HIT_SOUND.play()
         winner_text = ""
         if red_health <= 0:
             winner_text = "Yellow wins!"
