@@ -44,6 +44,10 @@ def main_loop():
     road3 = pygame.Rect((width / 2) + 30, 0, road_width, height * 2)
     road_base = pygame.Rect((width / 2) - 85, 0, (road_width * 3) + 20, height * 2)
     run = True
+
+    # counter to slow down execution & screen refresh
+    counter = 0
+
     while run:
         current_score = font.render(str(score), True, (0, 0, 0), (255, 255, 255))
         scorerect = current_score.get_rect()
@@ -54,19 +58,26 @@ def main_loop():
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 minion_movements(event, minion, road_base)
-        run = detect_for_collision(minion, obj_list)
-        score = send_objects(obj_list, obj_speed, score)
-        draw_screen(
-            minion, road1, road2, road3, road_base, obj_list, scorerect, current_score
-        )
-        if start == False:
-            start = ask_to_start()
+
+        # slow down execution & screen refresh for every thousanth execution
+        counter += 1
+        if counter == 1000:
+            counter = 0
+            run = detect_for_collision(minion, obj_list)
+            score = send_objects(obj_list, obj_speed, score)
+            draw_screen(
+                minion, road1, road2, road3, road_base, obj_list, scorerect, current_score
+            )
+
+        # if start == False:
+        #     start = ask_to_start()
             # if start == True:
             # soundtrack.play()
+
         frames += 1
         if frames == 9000:
             frames -= 9000
-            obj_speed += 1
+            # obj_speed += 1
         if run == False:
             finish_game(score)
 
@@ -127,7 +138,7 @@ def send_objects(obj_list, obj_speed, score):
 
 def send_obj(obj, obj_speed, score):
     if obj.y < -200:
-        obj.y += obj_speed + 40
+        obj.y += obj_speed 
     elif obj.y <= height and obj.y >= -200:
         obj.y += obj_speed
     elif obj.y > height:
