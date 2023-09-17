@@ -127,7 +127,7 @@ def handle_balls(red, blue, ball, x, y, sped, racket_sped):
     if ball.colliderect(border3) or ball.colliderect(border4):
         y = -y
     elif ball.colliderect(red) or ball.colliderect(blue):
-        sped += 0.04
+        sped += 0.15
         racket_sped = sped + og_racket_sped
         x = -x * sped
     ball.x += x
